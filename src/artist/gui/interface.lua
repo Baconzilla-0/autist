@@ -86,9 +86,9 @@ return function(context, extract_items)
         gui.Text { x = x + 2, y = y + 6, width = dwidth - 4, text = "Item Info: Tab", bg = "grey" },
 
         gui.Text { x = x + 1, y = y + 7, width = dwidth - 3, text = "Extra", bg = "grey" },
-        gui.Text { x = x + 2, y = y + 8, width = dwidth - 4, text = "Right click the search bar to clear", bg = "grey" },
+        gui.Text { x = x + 2, y = y + 8, width = dwidth - 4, text = "Clear: RClick", bg = "grey" },
 
-        gui.Button { x = dwidth - 4, y = dheight - 1, text = "Close", fg = "grey", bg = "red", bd = "grey", run = pop_frame },
+        gui.Button { x = dwidth - 4, y = dheight - 1, text = "Close", bg = "red", run = pop_frame },
       },
     })
   end
