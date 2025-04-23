@@ -21,12 +21,12 @@ else
     else
         print("Version "..version.." Does match "..target)
     end
-    --file.write(req.readAll())
+
 end
 
 req.close()
 
---wait(4)
+
 
 local context = require "artist"()
 

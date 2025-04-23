@@ -71,7 +71,7 @@ return function(context, extract_items)
       },
     })
   end
---[[
+
   local function push_help()
     local dwidth, dheight = (width - 2), (height - 2)
     local x, y = math.floor((width - dwidth) / 2) + 1, math.floor((height - dheight) / 2) + 1
@@ -92,10 +92,10 @@ return function(context, extract_items)
       },
     })
   end
-]]
-  --local function exit()
-  --  shell.run("reboot") 
-  --end
+
+  local function exit()
+    shell.run("reboot") 
+  end
 
   -- When we receive an item difference we update the item list. This schedules
   -- a redraw if required.
@@ -106,6 +106,7 @@ return function(context, extract_items)
       keymap = keybinding.create_keymap {
         ["C-d"] = function() ui:pop() end,
         ["C-S-f"] = push_furnace,
+        ["C-h"] = push_help,
         --["C-S-e"] = exit,
       },
       children = {

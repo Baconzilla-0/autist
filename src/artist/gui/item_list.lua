@@ -5,8 +5,6 @@ local fuzzy = require "metis.string.fuzzy"
 local ui = require "artist.gui.core"
 
 
-local cobble = "Cobblestone"
-
 local function compare_count(a, b)
   if a.count == b.count then
     return a.displayName >= b.displayName
