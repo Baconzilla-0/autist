@@ -2,47 +2,47 @@ local completion = require "cc.completion"
 local User = "Baconzilla-0"
 
 local files = {
-    "artist/core/context.lua",
-    "artist/core/items.lua",
-    "artist/gui/core.lua",
-    "artist/gui/extra.lua",
-    "artist/gui/interface.lua",
-    "artist/gui/interface/pickup_chest.lua",
-    "artist/gui/interface/turtle.lua",
-    "artist/gui/item_list.lua",
-    "artist/init.lua",
-    "artist/items/annotate.lua",
-    "artist/items/annotations.lua",
-    "artist/items/cache.lua",
-    "artist/items/dropoff.lua",
-    "artist/items/furnaces.lua",
-    "artist/items/inventories.lua",
-    "artist/items/trashcan.lua",
-    "artist/lib/class.lua",
-    "artist/lib/concurrent.lua",
-    "artist/lib/config.lua",
-    "artist/lib/log.lua",
-    "artist/lib/mediator.lua",
-    "artist/lib/serialise.lua",
-    "artist/lib/tbl.lua",
-    "artist/lib/turtle.lua",
-    "artist/lib/widget.lua",
-    "launch.lua",
-    "metis/input/keybinding.lua",
-    "metis/string/fuzzy.lua",
+  "artist/core/context.lua",
+  "artist/core/items.lua",
+  "artist/gui/core.lua",
+  "artist/gui/extra.lua",
+  "artist/gui/interface.lua",
+  "artist/gui/interface/pickup_chest.lua",
+  "artist/gui/interface/turtle.lua",
+  "artist/gui/item_list.lua",
+  "artist/init.lua",
+  "artist/items/annotate.lua",
+  "artist/items/annotations.lua",
+  "artist/items/cache.lua",
+  "artist/items/dropoff.lua",
+  "artist/items/furnaces.lua",
+  "artist/items/inventories.lua",
+  "artist/items/trashcan.lua",
+  "artist/lib/class.lua",
+  "artist/lib/concurrent.lua",
+  "artist/lib/config.lua",
+  "artist/lib/log.lua",
+  "artist/lib/mediator.lua",
+  "artist/lib/serialise.lua",
+  "artist/lib/tbl.lua",
+  "artist/lib/turtle.lua",
+  "artist/lib/widget.lua",
+  "launch.lua",
+  "metis/input/keybinding.lua",
+  "metis/string/fuzzy.lua",
 }
 local tasks = {}
 for i, path in ipairs(files) do
-    tasks[i] = function()
-        local req, err = http.get("https://raw.githubusercontent.com/"..User.."/autist/HEAD/src/" .. path)
-        if not req then error("Failed to download " .. path .. ": " .. err, 0) end
+  tasks[i] = function()
+    local req, err = http.get("https://raw.githubusercontent.com/"..User.."/autist/HEAD/src/" .. path)
+    if not req then error("Failed to download " .. path .. ": " .. err, 0) end
 
-        local file = fs.open(".artist.d/src/" .. path, "w")
-        file.write(req.readAll())
-        file.close()
+    local file = fs.open(".artist.d/src/" .. path, "w")
+    file.write(req.readAll())
+    file.close()
 
-        req.close()
-    end
+    req.close()
+  end
 end
 
 parallel.waitForAll(table.unpack(tasks))
@@ -51,13 +51,13 @@ io.open("artist.lua", "w"):write('shell.run(".artist.d/src/launch.lua")'):close(
 
 
 if peripheral.find("monitor") then
-    local req, err = http.get("https://raw.githubusercontent.com/"..User.."/autist/HEAD/examples/display.lua")
-    if not req then error("Failed to download Monitor Extension: " .. err, 0) end
-    local file = fs.open(".artist.d/src/display.lua", "w")
-    file.write(req.readAll())
-    file.close()
-    req.close()
-    print("Autist Display Extension successfully installed!")
+  local req, err = http.get("https://raw.githubusercontent.com/"..User.."/autist/HEAD/examples/display.lua")
+  if not req then error("Failed to download Monitor Extension: " .. err, 0) end
+  local file = fs.open(".artist.d/src/display.lua", "w")
+  file.write(req.readAll())
+  file.close()
+  req.close()
+  print("Autist Display Extension successfully installed!")
 end
 
 local req, err = http.get("https://raw.githubusercontent.com/"..User.."/autist/HEAD/installer.lua")
@@ -67,27 +67,35 @@ file.write(req.readAll())
 file.close()
 req.close()
 
+
+if not fs.exists("startup.lua") then
+  if not fs.exists(".artist.d/version.txt") then
+    local choices = { "yes", "no" }
+    print("Would you like to add Autist to startup.lua? [Y/N]")
+    write("> ")
+    local msg = read(nil, history, function(text) return completion.choice(text, choices) end, "n")
+
+    if msg == "yes" then
+      local file = fs.open("startup.lua", "w")
+      file.write("shell.run('artist.lua')")
+      file.close()
+    end
+  end
+end
+
+
 local req, err = http.get("https://raw.githubusercontent.com/"..User.."/autist/HEAD/version.txt")
 if not req then 
-    error("Version Fetch failed: " .. err, 0) 
+  error("Version Fetch failed: " .. err, 0) 
 else
-    local versionfile = fs.open(".artist.d/version.txt", "w")
-    versionfile.write(req.readAll())
-    versionfile.close()
+  local versionfile = fs.open(".artist.d/version.txt", "w")
+  versionfile.write(req.readAll())
+  versionfile.close()
 end
 req.close()
 
 
-local choices = { "yes", "no" }
-print("Would you like to add Autist to startup.lua? [Y/N]")
-write("> ")
-local msg = read(nil, history, function(text) return completion.choice(text, choices) end, "n")
 
-if msg == "yes" then
-    local file = fs.open("startup.lua", "w")
-    file.write("shell.run('artist.lua')")
-    file.close()
-end
 
 print("Autist Updater successfully installed!")
 print("Autist successfully installed! Run /artist.lua to start. :D")
